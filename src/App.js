@@ -8,12 +8,15 @@ import FourthComponent from "./components/learning-examples/FourthComponent"
 // eslint-disable-next-line
 import logo from './logo.svg';
 import './App.css';
+// eslint-disable-next-line
 import Counter from './components/Counter/Counter'
+import ToDoApp from './components/ToDoApp/ToDoApp'
 
 function App() {
   return (
     <div className="App">
-      <Counter/>
+      {/*<Counter/>*/}
+      <ToDoApp/>
     </div>
   );
 }
