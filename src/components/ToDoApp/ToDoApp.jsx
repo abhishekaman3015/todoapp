@@ -1,13 +1,19 @@
 import React, { Component } from 'react'
+import {BrowserRouter as Router, Route} from 'react-router-dom'
 
-export class ToDoApp extends Component {
-   
-
-
+class ToDoApp extends Component {
     render() {
         return (
             <div className="ToDoApp">
-                <LoginComponent/>
+                <Router>
+                    <>
+                        <Route path="/login" component={LoginComponent}/>
+                        <Route path="/welcome" component={WelcomeComponent}/>
+                    </>
+                </Router>
+
+               {/* <WelcomeComponent/>
+                <LoginComponent/>*/}
             </div>
         )
     }
@@ -104,5 +110,15 @@ export class LoginComponent extends Component {
 //     return null
 // }
 
+
+export class WelcomeComponent extends Component {
+    render() {
+        return (
+            <div>
+                Welcome to ToDoApp
+            </div>
+        )
+    }
+}
 
 export default ToDoApp
