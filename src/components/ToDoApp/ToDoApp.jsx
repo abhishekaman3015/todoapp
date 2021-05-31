@@ -1,14 +1,19 @@
 import React, { Component } from 'react'
-import {BrowserRouter as Router, Route} from 'react-router-dom'
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
 
 class ToDoApp extends Component {
     render() {
         return (
             <div className="ToDoApp">
                 <Router>
-                    <>
+                    <> 
+                        <Switch>
+                        <Route path="/" exact component={LoginComponent}/>
                         <Route path="/login" component={LoginComponent}/>
-                        <Route path="/welcome" component={WelcomeComponent}/>
+                        <Route path="/welcome/:name" component={WelcomeComponent}/>
+                        <Route path="/todos" component={ListTodosComponent}/>
+                        <Route component={ErrorComponent}/>
+                        </Switch>
                     </>
                 </Router>
 
@@ -39,9 +44,10 @@ export class LoginComponent extends Component {
     loginClicked(){
         //abhishek,123
         if (this.state.username==='abhishek' && this.state.password==='123'){
-            console.log('Successful')
-            this.setState({showSuccessMessage:true}) 
-            this.setState({hasLoginFailed:false})
+           // console.log('Successful')
+           this.props.history.push(`/welcome/${this.state.username}`)
+            // this.setState({showSuccessMessage:true}) 
+            // this.setState({hasLoginFailed:false})
         }
         else{
             console.log('Failed')
@@ -115,10 +121,47 @@ export class WelcomeComponent extends Component {
     render() {
         return (
             <div>
-                Welcome to ToDoApp
+                Welcome to ToDoApp {this.props.match.params.name}
             </div>
         )
     }
+}
+
+class ListTodosComponent extends Component {
+    constructor(props){
+        super(props)
+        this.state={
+            todo : {
+                id:1,
+                desc: 'Learn React'
+            }
+        }
+    }
+    render() {
+        return (
+            <div>
+               <h1> List todos</h1>
+               <table>
+                   <thead>
+                       <tr>
+                           <th>id</th>
+                           <th>desc</th>
+                       </tr>
+                   </thead>
+                   <tbody>
+                       <tr>
+                           <td>{this.state.todo.id}</td>
+                           <td>{this.state.todo.desc}</td>
+                       </tr>
+                   </tbody>
+               </table>
+            </div>
+        )
+    }
+}
+
+function ErrorComponent(){
+    return <div>An error occured!!</div>
 }
 
 export default ToDoApp
