@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
+import {BrowserRouter as Router, Link, Route, Switch} from 'react-router-dom'
+import AuthenticationService from './AuthenticationService.js'
 
 class ToDoApp extends Component {
     render() {
@@ -7,13 +8,16 @@ class ToDoApp extends Component {
             <div className="ToDoApp">
                 <Router>
                     <> 
+                    <HeaderComponent/>
                         <Switch>
                         <Route path="/" exact component={LoginComponent}/>
                         <Route path="/login" component={LoginComponent}/>
                         <Route path="/welcome/:name" component={WelcomeComponent}/>
                         <Route path="/todos" component={ListTodosComponent}/>
+                        <Route path="/logout" component={LogoutComponent}/>
                         <Route component={ErrorComponent}/>
                         </Switch>
+                    <FooterComponent/>
                     </>
                 </Router>
 
@@ -45,6 +49,7 @@ export class LoginComponent extends Component {
         //abhishek,123
         if (this.state.username==='abhishek' && this.state.password==='123'){
            // console.log('Successful')
+           AuthenticationService.registerSuccessfulLogin(this.state.username,this.state.password);
            this.props.history.push(`/welcome/${this.state.username}`)
             // this.setState({showSuccessMessage:true}) 
             // this.setState({hasLoginFailed:false})
@@ -90,13 +95,16 @@ export class LoginComponent extends Component {
     render() {
         return (
             <div>
+                <h1>Login</h1>
+            <div className="container">
                 {/*<ShowInvalidCredentials hasLoginFailed={this.state.hasLoginFailed}/>*/}
-                {this.state.hasLoginFailed && <div>Invalid Credentials</div>}
+                {this.state.hasLoginFailed && <div className="alert alert-warning">Invalid Credentials</div>}
                 {/*<ShowLoginSuccessMessage showSuccessMessage={this.state.showSuccessMessage}/>*/}
                 {this.state.showSuccessMessage && <div>Login Successful</div>}
                 User Name: <input type="text" name="username" value={this.state.username} onChange={this.handleChange}/>
                 Password: <input type="password" name="password" value={this.state.password} onChange={this.handleChange}/>
-                <button onClick={this.loginClicked}>Login</button>
+                <button className="btn btn-success" onClick={this.loginClicked}>Login</button>
+            </div>
             </div>
         )
     }
@@ -120,9 +128,12 @@ export class LoginComponent extends Component {
 export class WelcomeComponent extends Component {
     render() {
         return (
-            <div>
-                Welcome to ToDoApp {this.props.match.params.name}
-            </div>
+            <>
+                <h1>Welcome !</h1>
+                <div className="container">
+                Welcome to ToDoApp {this.props.match.params.name}. you can manage your todos <Link to="/todos">Here</Link>
+                </div>
+            </>
         )
     }
 }
@@ -131,31 +142,87 @@ class ListTodosComponent extends Component {
     constructor(props){
         super(props)
         this.state={
-            todo : {
-                id:1,
-                desc: 'Learn React'
+            todos : [
+                { id:1, desc: 'Learn React', done: false, targetDate: new Date()},
+                { id:2, desc: 'visit home', done: false, targetDate: new Date()},
+                { id:3, desc: 'Learn java', done: false, targetDate: new Date() }
+            ]
             }
-        }
     }
     render() {
         return (
             <div>
+
                <h1> List todos</h1>
-               <table>
+               <div className="container">
+               <table className="table">
                    <thead>
                        <tr>
-                           <th>id</th>
                            <th>desc</th>
+                           <th>Is Completed?</th>
+                           <th>Target Date</th>
                        </tr>
                    </thead>
                    <tbody>
-                       <tr>
-                           <td>{this.state.todo.id}</td>
-                           <td>{this.state.todo.desc}</td>
+                       {
+                        this.state.todos.map(
+                            todo => 
+                            <tr>
+                           <td>{todo.desc}</td>
+                           <td>{todo.done.toString()}</td>
+                           <td>{todo.targetDate.toString()}</td>
                        </tr>
+                        )
+                       
+                       
+                        }
                    </tbody>
                </table>
+               </div>
             </div>
+        )
+    }
+}
+
+class HeaderComponent extends Component{
+    render() {
+        return(
+            <header>
+                <nav className="navbar navbar-expand-md navbar-dark bg-dark">
+                    <div><a href="http://www.todo.com/" className="navbar-brand">TodoApp</a></div>
+                    <ul className="navbar-nav">
+                        <li> <Link className="nav-link" to="/welcome/abhishek">Home</Link></li>
+                        <li> <Link className="nav-link" to="/todos">Todos</Link></li>
+                    </ul>
+                    <ul className="navbar-nav navbar-collapse justify-content-end">
+                        <li> <Link className="nav-link" to="/login">Login</Link></li>
+                        <li> <Link className="nav-link" to="/logout" onClick={AuthenticationService.logout}>Logout</Link></li>
+                    </ul>
+                </nav>
+            </header>
+        )
+    }
+}
+
+class FooterComponent extends Component{
+    render() {
+        return(
+            <footer className="footer">
+                <span className="text-muted">All rights reserved. @TodoApp</span>
+            </footer>
+        )
+    }
+}
+
+class LogoutComponent extends Component{
+    render() {
+        return(
+            <>
+                <h1> You are logged out.</h1>
+                <div className="container">
+                    Thank You for using our app.
+                </div> 
+            </>
         )
     }
 }
