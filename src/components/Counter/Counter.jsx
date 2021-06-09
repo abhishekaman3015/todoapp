@@ -46,14 +46,14 @@ class Counter extends Component{
 }
 
 class CounterButton extends Component {
-    constructor(){
-         super();
+    //constructor(){
+     //    super();
         // this.state= {
         //     Counter:0
         // }
         // this.increment=this.increment.bind(this);
         // this.decrement=this.decrement.bind(this);
-    }
+    
 
 
 
@@ -83,8 +83,8 @@ class CounterButton extends Component {
 //     );
 //     this.props.decrementMethod(this.props.by);
 // }
-
 }
+
 
 CounterButton.defaultProps = {
     by : 1
