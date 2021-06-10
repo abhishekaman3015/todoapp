@@ -36,7 +36,7 @@ class ListTodosComponent extends Component {
                <table className="table">
                    <thead>
                        <tr>
-                           <th>desc</th>
+                           <th>Desc</th>
                            <th>Is Completed?</th>
                            <th>Target Date</th>
                        </tr>
@@ -46,7 +46,7 @@ class ListTodosComponent extends Component {
                         this.state.todos.map(
                             todo => 
                             <tr key={todo.id}>
-                           <td>{todo.desc}</td>
+                           <td>{todo.description}</td>
                            <td>{todo.done.toString()}</td>
                            <td>{todo.targetDate.toString()}</td>
                        </tr>
